@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@drawable/cs_box_outline</item>
+        <item name="boxStrokeWidth">@dimen/box_stroke_size_normal</item>
+        <item name="boxStrokeWidthFocused">@dimen/box_stroke_size_focused</item>
+        <item name="hintTextAppearance">@style/TextInputLayoutHintTextStyle</item>
+    </style>
+
+    <style name="TextInputLayoutHintTextStyle" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textColor">@drawable/cs_box_outline</item>
+    </style>
+</resources>
