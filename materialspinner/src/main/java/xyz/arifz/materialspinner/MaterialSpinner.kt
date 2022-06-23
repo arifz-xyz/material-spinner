@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.Filterable
-import android.widget.LinearLayout
 import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
@@ -73,6 +72,8 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.isCursorVisible = false
         autoCompleteTextView.inputType = InputType.TYPE_NULL
         addView(autoCompleteTextView)
+        autoCompleteTextView.setPadding(20, 20, 20, 20)
+        autoCompleteTextView.setOnClickListener { autoCompleteTextView.showDropDown() }
     }
 
     private fun setupAttributes(context: Context, attrs: AttributeSet?) {
@@ -151,9 +152,9 @@ class MaterialSpinner : TextInputLayout {
         }
     }
 
-    var text: Editable?
+    var text: String?
         get() {
-            return autoCompleteTextView.text
+            return autoCompleteTextView.text?.toString()
         }
         set(value) {
             autoCompleteTextView.setText(value, false)
