@@ -27,11 +27,17 @@ class DemoActivity : AppCompatActivity() {
 //
 //    private fun initListener() {
 //        binding.btn.setOnClickListener {
-//            Toast.makeText(
-//                this,
-//                binding.spn.text ?: "empty",
-//                Toast.LENGTH_SHORT
-//            ).show()
+//            val txt = binding.spn.text?.toString()
+//            if (txt.isNullOrEmpty()) {
+//                Toast.makeText(
+//                    this,
+//                    txt ?: "empty",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                binding.spn.error = "Error occurred"
+//            } else {
+//                binding.spn.text = null
+//            }
 //        }
 //    }
 
