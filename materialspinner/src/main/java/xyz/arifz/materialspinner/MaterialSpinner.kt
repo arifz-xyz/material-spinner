@@ -12,6 +12,7 @@ import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputLayout
+import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
 class MaterialSpinner : TextInputLayout {
 
@@ -50,8 +51,8 @@ class MaterialSpinner : TextInputLayout {
     private fun setupTheme() {
         boxBackgroundColor = ContextCompat.getColor(context, R.color.color_white)
         boxBackgroundMode = BOX_BACKGROUND_OUTLINE
-        boxStrokeWidth = 1
-        boxStrokeWidthFocused = 1
+        boxStrokeWidth = 2
+        boxStrokeWidthFocused = 2
         boxStrokeColor = ContextCompat.getColor(context, R.color.color_blue_crayola)
         setHintTextAppearance(R.style.TextInputLayoutHintTextStyle)
     }
@@ -61,7 +62,7 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView = AppCompatAutoCompleteTextView(context)
 
         autoCompleteTextView.layoutParams =
-            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 50.dpToPx())
         autoCompleteTextView.background = null
         autoCompleteTextView.setLines(1)
         autoCompleteTextView.maxLines = 1
@@ -147,6 +148,15 @@ class MaterialSpinner : TextInputLayout {
     fun setSelection(position: Int) {
         try {
             autoCompleteTextView.setSelection(position)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun clearSelection() {
+        try {
+            autoCompleteTextView.setSelection(-1)
+            autoCompleteTextView.setText(null, false)
         } catch (e: Exception) {
             e.printStackTrace()
         }
