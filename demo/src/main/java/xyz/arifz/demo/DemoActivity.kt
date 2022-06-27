@@ -1,6 +1,7 @@
 package xyz.arifz.demo
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,32 +14,39 @@ class DemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-//        setupSpinner()
-//        initListener()
+/*        setupSpinner()
+        initListener()*/
     }
 
-//    private fun setupSpinner() {
-//        val datas = arrayOf("Male", "Female", "Others")
-//        binding.spn.setAdapter(ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item , datas))
-//
-//        binding.spn.hint = "Gender"
-//        binding.spn.text = "Female"
-//    }
-//
-//    private fun initListener() {
-//        binding.btn.setOnClickListener {
-//            val txt = binding.spn.text?.toString()
-//            if (txt.isNullOrEmpty()) {
-//                Toast.makeText(
-//                    this,
-//                    txt ?: "empty",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                binding.spn.error = "Error occurred"
-//            } else {
-//                binding.spn.text = null
-//            }
-//        }
-//    }
+  /*  private fun setupSpinner() {
+        val datas = listOf("Male", "Female", "Others")
+        binding.spn.setItems(datas)
+
+        binding.spn.hint = "Gender"
+        binding.spn.text = "Female"
+
+        binding.spn.onItemClickListener { p0, p1, p2, p3 ->
+            Log.v(
+                "Hello",
+                "onItemClickListener"
+            )
+        }
+    }
+
+    private fun initListener() {
+        binding.btn.setOnClickListener {
+            val txt = binding.spn.text?.toString()
+            if (txt.isNullOrEmpty()) {
+                Toast.makeText(
+                    this,
+                    txt ?: "empty",
+                    Toast.LENGTH_SHORT
+                ).show()
+                binding.spn.error = "Error occurred"
+            } else {
+                binding.spn.text = null
+            }
+        }
+    }*/
 
 }

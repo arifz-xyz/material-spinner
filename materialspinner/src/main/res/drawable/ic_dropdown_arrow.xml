@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:state_focused="true">
+        <rotate
+            android:fromDegrees="-180" android:toDegrees="180">
+            <layer-list>
+                <item android:drawable="@drawable/ic_down_arrow"/>
+            </layer-list>
+        </rotate>
+
+    </item>
+
+    <item>
+        <layer-list>
+            <item android:drawable="@drawable/ic_down_arrow"/>
+        </layer-list>
+    </item>
+
+</selector>
