@@ -2,5 +2,6 @@
 <resources>
     <color name="color_blue_crayola">#136AFB</color>
     <color name="color_light_grey">#DDDDDD</color>
+    <color name="color_grey">#868686</color>
     <color name="color_white">#FFFFFFFF</color>
 </resources>
