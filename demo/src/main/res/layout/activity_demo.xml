@@ -7,7 +7,7 @@
     android:padding="24dp"
     tools:context=".DemoActivity">
 
-<!--    <xyz.arifz.materialspinner.MaterialSpinner
+    <xyz.arifz.materialspinner.MaterialSpinner
         android:id="@+id/spn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,6 +26,6 @@
         android:text="Next"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />-->
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

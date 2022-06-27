@@ -56,7 +56,12 @@ class MaterialSpinner : TextInputLayout {
         boxStrokeWidth = 3
         boxStrokeWidthFocused = 3
         boxStrokeColor = ContextCompat.getColor(context, R.color.color_blue_crayola)
-        setBoxStrokeColorStateList(ContextCompat.getColorStateList(context,R.color.colorset_box_stroke)!!)
+        setBoxStrokeColorStateList(
+            ContextCompat.getColorStateList(
+                context,
+                R.color.colorset_box_stroke
+            )!!
+        )
         setHintTextAppearance(R.style.TextInputLayoutHintTextStyle)
     }
 
@@ -96,8 +101,8 @@ class MaterialSpinner : TextInputLayout {
                     if (hint.isNullOrEmpty())
                         hint = ""
                     hint += " *"
-                    this.hint = hint
-                } else this.hint = hint
+                    setHint(hint)
+                } else setHint(hint)
 
                 val isReadOnly = a.getBoolean(R.styleable.MaterialSpinner_isReadOnly, false)
                 setReadOnly(isReadOnly)
@@ -158,9 +163,9 @@ class MaterialSpinner : TextInputLayout {
         setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
     }
 
-   /* fun <T : Array<String>> setItems(items: T) {
+    fun setItems(items: Array<String>) {
         setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
-    }*/
+    }
 
     fun setSelection(position: Int) {
         try {
@@ -179,6 +184,10 @@ class MaterialSpinner : TextInputLayout {
         }
     }
 
+    override fun setHint(hint: CharSequence?) {
+        super.setHint(hint)
+    }
+
     var text: String?
         get() {
             return autoCompleteTextView.text?.toString()
@@ -187,7 +196,6 @@ class MaterialSpinner : TextInputLayout {
             autoCompleteTextView.setText(value, false)
         }
 
-
     fun addTextChangedListener(watcher: TextWatcher) {
         autoCompleteTextView.addTextChangedListener(watcher)
     }
@@ -195,6 +203,5 @@ class MaterialSpinner : TextInputLayout {
     fun onItemClickListener(listener: AdapterView.OnItemClickListener) {
         autoCompleteTextView.onItemClickListener = listener
     }
-
 
 }

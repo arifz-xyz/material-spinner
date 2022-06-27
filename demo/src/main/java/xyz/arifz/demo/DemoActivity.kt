@@ -2,7 +2,6 @@ package xyz.arifz.demo
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import xyz.arifz.demo.databinding.ActivityDemoBinding
@@ -14,12 +13,12 @@ class DemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-/*        setupSpinner()
-        initListener()*/
+        setupSpinner()
+        initListener()
     }
 
-  /*  private fun setupSpinner() {
-        val datas = listOf("Male", "Female", "Others")
+    private fun setupSpinner() {
+        val datas = arrayOf("Male", "Female", "Others")
         binding.spn.setItems(datas)
 
         binding.spn.hint = "Gender"
@@ -35,18 +34,14 @@ class DemoActivity : AppCompatActivity() {
 
     private fun initListener() {
         binding.btn.setOnClickListener {
-            val txt = binding.spn.text?.toString()
+            val txt = binding.spn.text
             if (txt.isNullOrEmpty()) {
-                Toast.makeText(
-                    this,
-                    txt ?: "empty",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this, txt ?: "empty", Toast.LENGTH_SHORT).show()
                 binding.spn.error = "Error occurred"
             } else {
                 binding.spn.text = null
             }
         }
-    }*/
+    }
 
 }
