@@ -2,7 +2,11 @@ package xyz.arifz.materialspinner
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.Typeface
+import android.graphics.fonts.FontFamily
 import android.text.Editable
+import android.text.Html
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -13,6 +17,8 @@ import android.widget.Filterable
 import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.text.HtmlCompat
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
@@ -86,10 +92,12 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.isFocusableInTouchMode = false
         autoCompleteTextView.isCursorVisible = false
         autoCompleteTextView.inputType = InputType.TYPE_NULL
+        autoCompleteTextView.isInEditMode
         addView(autoCompleteTextView)
         autoCompleteTextView.setPadding(20, 20, 20, 20)
         autoCompleteTextView.setOnClickListener { autoCompleteTextView.showDropDown() }
     }
+
 
     private fun setupAttributes(context: Context, attrs: AttributeSet?) {
         if (attrs != null) {
@@ -202,6 +210,22 @@ class MaterialSpinner : TextInputLayout {
 
     fun onItemClickListener(listener: AdapterView.OnItemClickListener) {
         autoCompleteTextView.onItemClickListener = listener
+    }
+
+    fun setTextInputLayer(fontFamily: Int? = null, hintHtml: Int) {
+        typeface = fontFamily?.let { ResourcesCompat.getFont(context, it) }
+        val text = HtmlCompat.fromHtml(
+            context.getString(hintHtml) ,
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+        this.hint = text
+    }
+
+    fun setAutoCompleteTextView(fontFamily: Int? = null , fontSizeDp:Int? = null, textColorCode: String? = null ) {
+        autoCompleteTextView.typeface = fontFamily?.let { ResourcesCompat.getFont(context, it) }
+        autoCompleteTextView.setTextColor(Color.parseColor(textColorCode))
+        fontSizeDp?.dpToPx()?.let { autoCompleteTextView.textSize = it.toFloat() }
+
     }
 
 }

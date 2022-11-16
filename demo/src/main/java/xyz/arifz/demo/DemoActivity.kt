@@ -24,6 +24,7 @@ class DemoActivity : AppCompatActivity() {
         binding.spn.hint = "Gender"
         binding.spn.text = "Female"
 
+
         binding.spn.onItemClickListener { p0, p1, p2, p3 ->
             Log.v(
                 "Hello",
