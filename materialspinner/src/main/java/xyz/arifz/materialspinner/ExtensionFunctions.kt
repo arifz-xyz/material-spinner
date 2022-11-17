@@ -10,10 +10,10 @@ object ExtensionFunctions {
 
 }
 
-fun Int.spToPx(context: Context): Int {
+fun Int.spToPx(): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         this.toFloat(),
-        context.resources.displayMetrics
+        getSystem().displayMetrics
     ).toInt()
 }

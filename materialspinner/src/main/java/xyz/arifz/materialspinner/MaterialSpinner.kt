@@ -3,7 +3,6 @@ package xyz.arifz.materialspinner
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.fonts.FontFamily
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
@@ -15,14 +14,13 @@ import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.HtmlCompat
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
 class MaterialSpinner : TextInputLayout {
 
     private lateinit var autoCompleteTextView: AppCompatAutoCompleteTextView
-    private var hintForRed = ""
+    private var hintForColor = ""
     private var isRequired = false
 
     init {
@@ -106,10 +104,10 @@ class MaterialSpinner : TextInputLayout {
                     if (hint.isNullOrEmpty())
                         hint = ""
                     hint += " *"
-                    hintForRed = hint
+                    hintForColor = hint
                     setHintAsteriskColor(Color.RED)
                 } else {
-                    hintForRed = hint ?: ""
+                    hintForColor = hint ?: ""
                     setHint(hint)
                 }
 
@@ -195,10 +193,10 @@ class MaterialSpinner : TextInputLayout {
 
     override fun setHint(hint: CharSequence?) {
         if (isRequired) {
-            hintForRed = "$hint *"
+            hintForColor = "$hint *"
             setHintAsteriskColor(Color.RED)
         } else {
-            hintForRed = hint?.toString() ?: ""
+            hintForColor = hint?.toString() ?: ""
             super.setHint(hint)
         }
     }
@@ -220,8 +218,8 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun setHintAsteriskColor(color: Int) {
-        val len = hintForRed.length
-        val sb = SpannableStringBuilder(hintForRed)
+        val len = hintForColor.length
+        val sb = SpannableStringBuilder(hintForColor)
         val asteriskColor = ForegroundColorSpan(color)
         if (len != 0) {
             sb.setSpan(asteriskColor, len - 1, len, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
@@ -246,8 +244,8 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.setTextColor(Color.parseColor(textColorCode))
     }
 
-    fun setTextSize(fontSizeDp: Int) {
-        fontSizeDp.spToPx(context).let { autoCompleteTextView.textSize = it.toFloat() }
+    fun setTextSize(fontSizeSp: Int) {
+        fontSizeSp.spToPx().let { autoCompleteTextView.textSize = it.toFloat() }
     }
 
 }
