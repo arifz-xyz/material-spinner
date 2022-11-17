@@ -2,9 +2,9 @@ package xyz.arifz.materialspinner
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
+import android.graphics.Color
+import android.text.*
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -13,12 +13,15 @@ import android.widget.Filterable
 import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
 class MaterialSpinner : TextInputLayout {
 
     private lateinit var autoCompleteTextView: AppCompatAutoCompleteTextView
+    private var hintForColor = ""
+    private var isRequired = false
 
     init {
         setupTheme()
@@ -96,13 +99,17 @@ class MaterialSpinner : TextInputLayout {
             val a = context.obtainStyledAttributes(attrs, R.styleable.MaterialSpinner)
             try {
                 var hint = a.getString(R.styleable.MaterialSpinner_hint)
-                val isRequired = a.getBoolean(R.styleable.MaterialSpinner_isRequired, false)
+                isRequired = a.getBoolean(R.styleable.MaterialSpinner_isRequired, false)
                 if (isRequired) {
                     if (hint.isNullOrEmpty())
                         hint = ""
                     hint += " *"
+                    hintForColor = hint
+                    setHintAsteriskColor(Color.RED)
+                } else {
+                    hintForColor = hint ?: ""
                     setHint(hint)
-                } else setHint(hint)
+                }
 
                 val isReadOnly = a.getBoolean(R.styleable.MaterialSpinner_isReadOnly, false)
                 setReadOnly(isReadOnly)
@@ -185,7 +192,13 @@ class MaterialSpinner : TextInputLayout {
     }
 
     override fun setHint(hint: CharSequence?) {
-        super.setHint(hint)
+        if (isRequired) {
+            hintForColor = "$hint *"
+            setHintAsteriskColor(Color.RED)
+        } else {
+            hintForColor = hint?.toString() ?: ""
+            super.setHint(hint)
+        }
     }
 
     var text: String?
@@ -202,6 +215,37 @@ class MaterialSpinner : TextInputLayout {
 
     fun onItemClickListener(listener: AdapterView.OnItemClickListener) {
         autoCompleteTextView.onItemClickListener = listener
+    }
+
+    fun setHintAsteriskColor(color: Int) {
+        val len = hintForColor.length
+        val sb = SpannableStringBuilder(hintForColor)
+        val asteriskColor = ForegroundColorSpan(color)
+        if (len != 0) {
+            sb.setSpan(asteriskColor, len - 1, len, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            super.setHint(sb)
+        }
+    }
+
+    fun setHintFontFamily(fontFamily: Int) {
+        fontFamily.let { ResourcesCompat.getFont(context, it) }.also { typeface = it }
+    }
+
+    fun setBoxWidth(size: Int) {
+        boxStrokeWidth = size
+        boxStrokeWidthFocused = size
+    }
+
+    fun setTextFontFamily(fontFamily: Int) {
+        autoCompleteTextView.typeface = fontFamily?.let { ResourcesCompat.getFont(context, it) }
+    }
+
+    fun setTextColor(textColorCode: String) {
+        autoCompleteTextView.setTextColor(Color.parseColor(textColorCode))
+    }
+
+    fun setTextSize(fontSizeSp: Int) {
+        fontSizeSp.spToPx().let { autoCompleteTextView.textSize = it.toFloat() }
     }
 
 }
