@@ -1,5 +1,6 @@
 package xyz.arifz.demo
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -22,7 +23,16 @@ class DemoActivity : AppCompatActivity() {
         binding.spn.setItems(datas)
 
         binding.spn.hint = "Gender"
+        binding.spn.apply {
+            setBoxWidth(1)
+            setHintFontFamily(R.font.poppins)
+            setTextSize(8)
+            setTextColor("#FF0000")
+            setTextFontFamily(R.font.poppins)
+        }
+
         binding.spn.text = "Female"
+
 
         binding.spn.onItemClickListener { p0, p1, p2, p3 ->
             Log.v(
@@ -43,5 +53,7 @@ class DemoActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
 }
