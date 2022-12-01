@@ -116,6 +116,8 @@ class MaterialSpinner : TextInputLayout {
 
                 val radius = a.getFloat(R.styleable.MaterialSpinner_radius, 5f)
                 setBoxCornerRadii(radius, radius, radius, radius)
+                val textSize = a.getDimension(R.styleable.MaterialSpinner_textSize, 12f)
+                setTextSize(textSize)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -237,15 +239,15 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun setTextFontFamily(fontFamily: Int) {
-        autoCompleteTextView.typeface = fontFamily?.let { ResourcesCompat.getFont(context, it) }
+        autoCompleteTextView.typeface = fontFamily.let { ResourcesCompat.getFont(context, it) }
     }
 
     fun setTextColor(textColorCode: String) {
         autoCompleteTextView.setTextColor(Color.parseColor(textColorCode))
     }
 
-    fun setTextSize(fontSizeSp: Int) {
-        fontSizeSp.spToPx().let { autoCompleteTextView.textSize = it.toFloat() }
+    fun setTextSize(fontSizeSp: Float) {
+        autoCompleteTextView.textSize = fontSizeSp
     }
 
 }
