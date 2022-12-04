@@ -250,4 +250,9 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.textSize = fontSizeSp
     }
 
+    fun setIsRequired(isReq: Boolean) {
+        isRequired = isReq
+        setHint(hint?.toString()?.trim()?.replace(" *", ""))
+    }
+
 }
