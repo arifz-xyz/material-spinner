@@ -7,7 +7,7 @@
         <attr name="isReadOnly" format="boolean" />
         <attr name="hint" format="string" />
         <attr name="radius" format="float" />
-        <attr name="textSize" format="dimension"/>
+        <attr name="fontSize" format="float" />
     </declare-styleable>
 
 </resources>
