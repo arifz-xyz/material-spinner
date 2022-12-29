@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
+import android.util.Log
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -14,14 +15,20 @@ import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.FragmentManager
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
 class MaterialSpinner : TextInputLayout {
 
+    val TAG = "MaterialSpinner"
+
     private lateinit var autoCompleteTextView: AppCompatAutoCompleteTextView
     private var hintForColor = ""
     private var isRequired = false
+    private var isSearchEnable = false
+    private var fragmentManager: FragmentManager? = null
+    private var container:Int? = null
 
     init {
         setupTheme()
@@ -147,10 +154,12 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.setTextColor(ContextCompat.getColor(context, R.color.color_light_grey))
     }
 
-    override fun setOnClickListener(l: OnClickListener?) {
-        super.setOnClickListener(l)
-        autoCompleteTextView.showDropDown()
-    }
+      override fun setOnClickListener(l: OnClickListener?) {
+          super.setOnClickListener(l)
+          Log.d(TAG, "setOnClickListener: mm")
+          if(!isSearchEnable)  autoCompleteTextView.showDropDown()
+          else navigateToSearchFragment()
+      }
 
     private fun initWatchers() {
         autoCompleteTextView.addTextChangedListener(object : TextWatcher {
@@ -246,6 +255,19 @@ class MaterialSpinner : TextInputLayout {
 
     fun setTextSize(fontSizeSp: Int) {
         fontSizeSp.spToPx().let { autoCompleteTextView.textSize = it.toFloat() }
+    }
+
+    fun setUpSearch(isEnable: Boolean,fm: FragmentManager, container: Int) {
+        isSearchEnable = isEnable
+        fragmentManager = fm
+        this.container = container
+    }
+
+    fun navigateToSearchFragment() {
+        Log.d(TAG, "navigateToSearchFragment: outside")
+        if (isSearchEnable) {
+            container?.let { fragmentManager?.beginTransaction()?.add(it, SearchFragment())?.commit() }
+        }
     }
 
 }

@@ -1,11 +1,12 @@
 package xyz.arifz.demo
 
-import android.graphics.Color
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import xyz.arifz.demo.databinding.ActivityDemoBinding
+
 
 class DemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDemoBinding
@@ -14,14 +15,15 @@ class DemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setupSpinner()
         initListener()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupSpinner() {
         val datas = arrayOf("Male", "Female", "Others")
         binding.spn.setItems(datas)
-
         binding.spn.hint = "Gender"
         binding.spn.apply {
             setBoxWidth(1)
@@ -40,6 +42,29 @@ class DemoActivity : AppCompatActivity() {
                 "onItemClickListener"
             )
         }
+
+        binding.spn.apply {
+            setUpSearch(true, supportFragmentManager, R.id.container)
+            navigateToSearchFragment()
+        }
+
+
+       /* binding.spn.setOnClickListener {
+            binding.spn.navigateToSearchFragment()
+        }
+*/
+
+
+       /* binding.spn.apply {
+
+            setOnClickListener {
+                Log.d(TAG, "setupSpinner: touch")
+                //binding.spn.navigateToSearchFragment(supportFragmentManager, R.id.container)
+            }
+        }*/
+
+
+
     }
 
     private fun initListener() {
