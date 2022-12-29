@@ -7,10 +7,7 @@ import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Filterable
-import android.widget.ListAdapter
+import android.widget.*
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -22,6 +19,7 @@ class MaterialSpinner : TextInputLayout {
     private lateinit var autoCompleteTextView: AppCompatAutoCompleteTextView
     private var hintForColor = ""
     private var isRequired = false
+    private var isSearchable = false
 
     init {
         setupTheme()
@@ -69,7 +67,6 @@ class MaterialSpinner : TextInputLayout {
     }
 
     private fun setupView(context: Context) {
-
         autoCompleteTextView = AppCompatAutoCompleteTextView(context)
 
         autoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(
@@ -91,7 +88,7 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.inputType = InputType.TYPE_NULL
         addView(autoCompleteTextView)
         autoCompleteTextView.setPadding(20, 20, 20, 20)
-        autoCompleteTextView.setOnClickListener { autoCompleteTextView.showDropDown() }
+        autoCompleteTextView.setOnClickListener { clickHandling() }
     }
 
     private fun setupAttributes(context: Context, attrs: AttributeSet?) {
@@ -100,6 +97,7 @@ class MaterialSpinner : TextInputLayout {
             try {
                 var hint = a.getString(R.styleable.MaterialSpinner_hint)
                 isRequired = a.getBoolean(R.styleable.MaterialSpinner_isRequired, false)
+                isSearchable = a.getBoolean(R.styleable.MaterialSpinner_isSearchable, false)
                 if (isRequired) {
                     if (hint.isNullOrEmpty())
                         hint = ""
@@ -151,7 +149,13 @@ class MaterialSpinner : TextInputLayout {
 
     override fun setOnClickListener(l: OnClickListener?) {
         super.setOnClickListener(l)
-        autoCompleteTextView.showDropDown()
+        clickHandling()
+    }
+
+    private fun clickHandling() {
+        if (isSearchable)
+            Toast.makeText(context, "searchable", Toast.LENGTH_SHORT).show()
+        else autoCompleteTextView.showDropDown()
     }
 
     private fun initWatchers() {
@@ -165,7 +169,10 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun <T> setAdapter(adapter: T) where T : ListAdapter, T : Filterable {
-        autoCompleteTextView.setAdapter(adapter)
+        if (isSearchable)
+            Toast.makeText(context, "need to initialize custom adapter here", Toast.LENGTH_SHORT)
+                .show()
+        else autoCompleteTextView.setAdapter(adapter)
     }
 
     fun <T : List<String>> setItems(items: T) {
@@ -253,6 +260,10 @@ class MaterialSpinner : TextInputLayout {
     fun setIsRequired(isReq: Boolean) {
         isRequired = isReq
         setHint(hint?.toString()?.trim()?.replace(" *", ""))
+    }
+
+    fun setIsSearchable(searchable: Boolean) {
+        isSearchable = searchable
     }
 
 }
