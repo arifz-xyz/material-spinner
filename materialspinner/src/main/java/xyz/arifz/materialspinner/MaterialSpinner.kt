@@ -1,6 +1,8 @@
 package xyz.arifz.materialspinner
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.*
@@ -153,9 +155,10 @@ class MaterialSpinner : TextInputLayout {
     }
 
     private fun clickHandling() {
-        if (isSearchable)
-            Toast.makeText(context, "searchable", Toast.LENGTH_SHORT).show()
-        else autoCompleteTextView.showDropDown()
+        if (isSearchable) {
+            val activity = scanForActivity(context)
+            Toast.makeText(context, "searchable $activity", Toast.LENGTH_SHORT).show()
+        } else autoCompleteTextView.showDropDown()
     }
 
     private fun initWatchers() {
@@ -264,6 +267,13 @@ class MaterialSpinner : TextInputLayout {
 
     fun setIsSearchable(searchable: Boolean) {
         isSearchable = searchable
+    }
+
+    private fun scanForActivity(ctx: Context): Activity? {
+        if (ctx is Activity) return ctx else if (ctx is ContextWrapper) return scanForActivity(
+            ctx.baseContext
+        )
+        return null
     }
 
 }
