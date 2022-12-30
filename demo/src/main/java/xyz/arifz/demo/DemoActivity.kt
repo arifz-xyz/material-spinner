@@ -29,6 +29,7 @@ class DemoActivity : AppCompatActivity() {
             setBoxWidth(1)
             setHintFontFamily(R.font.poppins)
             setFontSize(12f)
+
             setTextColor("#FF0000")
             setTextFontFamily(R.font.poppins)
         }

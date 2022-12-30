@@ -303,6 +303,7 @@ class MaterialSpinner : TextInputLayout {
                 Log.d("TAG", "navigateToSearchFragment: $selectedItem ")
 
             }
+
     }
 
 }
