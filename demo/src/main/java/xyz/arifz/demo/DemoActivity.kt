@@ -1,6 +1,5 @@
 package xyz.arifz.demo
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -33,8 +32,7 @@ class DemoActivity : AppCompatActivity() {
 
         binding.spn.text = "Female"
 
-
-        binding.spn.onItemClickListener { p0, p1, p2, p3 ->
+        binding.spn.onItemClickListener { _, _, _, _ ->
             Log.v(
                 "Hello",
                 "onItemClickListener"

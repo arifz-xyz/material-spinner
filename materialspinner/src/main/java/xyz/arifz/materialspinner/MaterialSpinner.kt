@@ -8,11 +8,17 @@ import android.graphics.Color
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Filterable
+import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
@@ -22,6 +28,7 @@ class MaterialSpinner : TextInputLayout {
     private var hintForColor = ""
     private var isRequired = false
     private var isSearchable = false
+    private var items = ArrayList<String>()
 
     init {
         setupTheme()
@@ -157,7 +164,9 @@ class MaterialSpinner : TextInputLayout {
     private fun clickHandling() {
         if (isSearchable) {
             val activity = scanForActivity(context)
-            Toast.makeText(context, "searchable $activity", Toast.LENGTH_SHORT).show()
+            activity?.let { openSearchDialogFragment(it) } ?: run {
+                Log.d("MaterialSpinner", "activity not found")
+            }
         } else autoCompleteTextView.showDropDown()
     }
 
@@ -172,10 +181,7 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun <T> setAdapter(adapter: T) where T : ListAdapter, T : Filterable {
-        if (isSearchable)
-            Toast.makeText(context, "need to initialize custom adapter here", Toast.LENGTH_SHORT)
-                .show()
-        else autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setAdapter(adapter)
     }
 
     fun <T : List<String>> setItems(items: T) {
@@ -183,7 +189,8 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun setItems(items: Array<String>) {
-        setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
+        if (isSearchable) this.items = items.toList() as? ArrayList<String> ?: ArrayList()
+        else setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
     }
 
     fun setSelection(position: Int) {
@@ -267,6 +274,24 @@ class MaterialSpinner : TextInputLayout {
 
     fun setIsSearchable(searchable: Boolean) {
         isSearchable = searchable
+    }
+
+    private fun openSearchDialogFragment(activity: Activity) {
+        val container = activity.findViewById<View>(android.R.id.content)
+        val searchDialogFragment = SearchDialogFragment.newInstance(items)
+        val fragmentActivity = activity as FragmentActivity
+        if (container != null) {
+            fragmentActivity.supportFragmentManager.beginTransaction()
+                .replace(container.id, searchDialogFragment).commit()
+        }
+
+        fragmentActivity.supportFragmentManager.setFragmentResultListener(
+            KEY_SEARCH,
+            fragmentActivity
+        ) { _, result ->
+            val selectedItem = result.getString(KEY_SELECTED_ITEM)
+            text = selectedItem
+        }
     }
 
     private fun scanForActivity(ctx: Context): Activity? {
