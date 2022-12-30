@@ -5,6 +5,7 @@
         <attr name="isRequired" format="boolean" />
         <attr name="isEnabled" format="boolean" />
         <attr name="isReadOnly" format="boolean" />
+        <attr name="isSearchable" format="boolean" />
         <attr name="hint" format="string" />
         <attr name="radius" format="float" />
         <attr name="fontSize" format="float" />
