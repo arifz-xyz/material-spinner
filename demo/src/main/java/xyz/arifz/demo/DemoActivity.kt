@@ -20,15 +20,15 @@ class DemoActivity : AppCompatActivity() {
         initListener()
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setupSpinner() {
         val datas = arrayOf("Male", "Female", "Others")
         binding.spn.setItems(datas)
+
         binding.spn.hint = "Gender"
         binding.spn.apply {
             setBoxWidth(1)
             setHintFontFamily(R.font.poppins)
-            setTextSize(8)
+            setFontSize(12f)
             setTextColor("#FF0000")
             setTextFontFamily(R.font.poppins)
         }
@@ -42,29 +42,6 @@ class DemoActivity : AppCompatActivity() {
                 "onItemClickListener"
             )
         }
-
-        binding.spn.apply {
-            setUpSearch(true, supportFragmentManager, R.id.container)
-            navigateToSearchFragment()
-        }
-
-
-       /* binding.spn.setOnClickListener {
-            binding.spn.navigateToSearchFragment()
-        }
-*/
-
-
-       /* binding.spn.apply {
-
-            setOnClickListener {
-                Log.d(TAG, "setupSpinner: touch")
-                //binding.spn.navigateToSearchFragment(supportFragmentManager, R.id.container)
-            }
-        }*/
-
-
-
     }
 
     private fun initListener() {

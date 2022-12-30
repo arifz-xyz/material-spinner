@@ -14,11 +14,24 @@ import androidx.fragment.app.DialogFragment
 class SearchFragment : DialogFragment() {
     var searchView: SearchView? = null
     var listView: ListView? = null
-    val dataList = ArrayList<String>()
+    var dataList = ArrayList<String>()
     var adapter: ArrayAdapter<String>? = null
+
+   companion object{
+       fun newInstance(data: ArrayList<String>?):SearchFragment{
+           val fragment = SearchFragment()
+           val args = Bundle()
+           args.putStringArrayList("dataList",data)
+           fragment.arguments = args
+           return fragment
+       }
+   }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.apply {
+           dataList = getStringArrayList("dataList") as ArrayList<String>
+        }
     }
 
     override fun onCreateView(
@@ -37,9 +50,6 @@ class SearchFragment : DialogFragment() {
         searchView = view.findViewById(R.id.sv_search)
         listView = view.findViewById(R.id.lv_items)
 
-        dataList.add("Ami")
-        dataList.add("Tumi")
-        dataList.add("She")
 
         adapter = ArrayAdapter<String>(requireContext(),android.R.layout.simple_list_item_1,dataList)
         listView?.adapter = adapter
@@ -53,6 +63,10 @@ class SearchFragment : DialogFragment() {
         listView?.setOnItemClickListener  { _, _, position, _ ->
             val element = adapter?.getItem(position)
             Toast.makeText(requireContext(),element,Toast.LENGTH_SHORT).show()
+            val bundle = Bundle()
+            bundle.putString("selected",element)
+            requireActivity().supportFragmentManager.setFragmentResult("SEARCH",bundle)
+            dismiss()
         }
     }
 

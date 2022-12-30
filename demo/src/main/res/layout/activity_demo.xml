@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
+    android:id="@+id/root_layout"
     tools:context=".DemoActivity">
 
     <xyz.arifz.materialspinner.MaterialSpinner
@@ -12,18 +13,19 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:hint="This is hint"
+        app:isSearchable="true"
         app:isRequired="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.fragment.app.FragmentContainerView
+ <!--   <androidx.fragment.app.FragmentContainerView
         android:layout_width="match_parent"
         android:id="@+id/container"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content"/>
-
+-->
     <Button
         android:id="@+id/btn"
         android:layout_width="0dp"
