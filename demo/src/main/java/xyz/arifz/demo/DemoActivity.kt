@@ -1,10 +1,12 @@
 package xyz.arifz.demo
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import xyz.arifz.demo.databinding.ActivityDemoBinding
+
 
 class DemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDemoBinding
@@ -13,6 +15,7 @@ class DemoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDemoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         setupSpinner()
         initListener()
     }
@@ -22,6 +25,15 @@ class DemoActivity : AppCompatActivity() {
         binding.spn.setItems(datas)
 
         binding.spn.hint = "Gender"
+        binding.spn.apply {
+            setBoxWidth(1)
+            setHintFontFamily(R.font.poppins)
+            setFontSize(12f)
+
+            setTextColor("#FF0000")
+            setTextFontFamily(R.font.poppins)
+        }
+
         binding.spn.text = "Female"
 
 

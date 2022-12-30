@@ -1,30 +1,32 @@
 package xyz.arifz.materialspinner
 
+import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.Typeface
-import android.graphics.fonts.FontFamily
-import android.text.Editable
-import android.text.Html
-import android.text.InputType
-import android.text.TextWatcher
+import android.text.*
+import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
+import android.util.Log
+import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Filterable
-import android.widget.ListAdapter
+import android.widget.*
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.text.HtmlCompat
+import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
+
 
 class MaterialSpinner : TextInputLayout {
 
     private lateinit var autoCompleteTextView: AppCompatAutoCompleteTextView
+    private var hintForColor = ""
+    private var isRequired = false
+    private var isSearchable = false
+    private var dataList:ArrayList<String>? = null
 
     init {
         setupTheme()
@@ -72,7 +74,6 @@ class MaterialSpinner : TextInputLayout {
     }
 
     private fun setupView(context: Context) {
-
         autoCompleteTextView = AppCompatAutoCompleteTextView(context)
 
         autoCompleteTextView.setCompoundDrawablesWithIntrinsicBounds(
@@ -92,31 +93,36 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.isFocusableInTouchMode = false
         autoCompleteTextView.isCursorVisible = false
         autoCompleteTextView.inputType = InputType.TYPE_NULL
-        autoCompleteTextView.isInEditMode
         addView(autoCompleteTextView)
         autoCompleteTextView.setPadding(20, 20, 20, 20)
-        autoCompleteTextView.setOnClickListener { autoCompleteTextView.showDropDown() }
+        autoCompleteTextView.setOnClickListener { clickHandling() }
     }
-
 
     private fun setupAttributes(context: Context, attrs: AttributeSet?) {
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.MaterialSpinner)
             try {
                 var hint = a.getString(R.styleable.MaterialSpinner_hint)
-                val isRequired = a.getBoolean(R.styleable.MaterialSpinner_isRequired, false)
+                isRequired = a.getBoolean(R.styleable.MaterialSpinner_isRequired, false)
+                isSearchable = a.getBoolean(R.styleable.MaterialSpinner_isSearchable, false)
                 if (isRequired) {
                     if (hint.isNullOrEmpty())
                         hint = ""
                     hint += " *"
+                    hintForColor = hint
+                    setHintAsteriskColor(Color.RED)
+                } else {
+                    hintForColor = hint ?: ""
                     setHint(hint)
-                } else setHint(hint)
+                }
 
                 val isReadOnly = a.getBoolean(R.styleable.MaterialSpinner_isReadOnly, false)
                 setReadOnly(isReadOnly)
 
                 val radius = a.getFloat(R.styleable.MaterialSpinner_radius, 5f)
                 setBoxCornerRadii(radius, radius, radius, radius)
+                val fontSize = a.getFloat(R.styleable.MaterialSpinner_fontSize, 0f)
+                setFontSize(fontSize)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -150,7 +156,18 @@ class MaterialSpinner : TextInputLayout {
 
     override fun setOnClickListener(l: OnClickListener?) {
         super.setOnClickListener(l)
-        autoCompleteTextView.showDropDown()
+        clickHandling()
+    }
+
+    private fun clickHandling() {
+        if (isSearchable) {
+            val activity = scanForActivity(context)
+            Toast.makeText(context, "searchable $activity", Toast.LENGTH_SHORT).show()
+            if (activity != null) {
+                searchFragmentOperation(activity)
+            }
+
+        } else autoCompleteTextView.showDropDown()
     }
 
     private fun initWatchers() {
@@ -164,7 +181,10 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun <T> setAdapter(adapter: T) where T : ListAdapter, T : Filterable {
-        autoCompleteTextView.setAdapter(adapter)
+        if (isSearchable)
+            Toast.makeText(context, "need to initialize custom adapter here", Toast.LENGTH_SHORT)
+                .show()
+        else autoCompleteTextView.setAdapter(adapter)
     }
 
     fun <T : List<String>> setItems(items: T) {
@@ -172,6 +192,7 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun setItems(items: Array<String>) {
+        dataList = items.toList() as ArrayList<String>
         setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
     }
 
@@ -193,7 +214,13 @@ class MaterialSpinner : TextInputLayout {
     }
 
     override fun setHint(hint: CharSequence?) {
-        super.setHint(hint)
+        if (isRequired) {
+            hintForColor = "$hint *"
+            setHintAsteriskColor(Color.RED)
+        } else {
+            hintForColor = hint?.toString() ?: ""
+            super.setHint(hint)
+        }
     }
 
     var text: String?
@@ -212,19 +239,70 @@ class MaterialSpinner : TextInputLayout {
         autoCompleteTextView.onItemClickListener = listener
     }
 
-    fun setTextInputLayer(fontFamily: Int? = null, hintHtml: Int) {
-        typeface = fontFamily?.let { ResourcesCompat.getFont(context, it) }
-        val text = HtmlCompat.fromHtml(
-            context.getString(hintHtml) ,
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
-        this.hint = text
+    fun setHintAsteriskColor(color: Int) {
+        val len = hintForColor.length
+        val sb = SpannableStringBuilder(hintForColor)
+        val asteriskColor = ForegroundColorSpan(color)
+        if (len != 0) {
+            sb.setSpan(asteriskColor, len - 1, len, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            super.setHint(sb)
+        }
     }
 
-    fun setAutoCompleteTextView(fontFamily: Int? = null , fontSizeDp:Int? = null, textColorCode: String? = null ) {
-        autoCompleteTextView.typeface = fontFamily?.let { ResourcesCompat.getFont(context, it) }
+    fun setHintFontFamily(fontFamily: Int) {
+        fontFamily.let { ResourcesCompat.getFont(context, it) }.also { typeface = it }
+    }
+
+    fun setBoxWidth(size: Int) {
+        boxStrokeWidth = size
+        boxStrokeWidthFocused = size
+    }
+
+    fun setTextFontFamily(fontFamily: Int) {
+        autoCompleteTextView.typeface = fontFamily.let { ResourcesCompat.getFont(context, it) }
+    }
+
+    fun setTextColor(textColorCode: String) {
         autoCompleteTextView.setTextColor(Color.parseColor(textColorCode))
-        fontSizeDp?.dpToPx()?.let { autoCompleteTextView.textSize = it.toFloat() }
+    }
+
+    fun setFontSize(fontSize: Float) {
+        if (fontSize > 0) autoCompleteTextView.textSize = fontSize
+    }
+
+    fun setIsRequired(isReq: Boolean) {
+        isRequired = isReq
+        setHint(hint?.toString()?.trim()?.replace(" *", ""))
+    }
+
+    fun setIsSearchable(searchable: Boolean) {
+        isSearchable = searchable
+    }
+
+    private fun scanForActivity(ctx: Context): Activity? {
+        if (ctx is Activity) return ctx else if (ctx is ContextWrapper) return scanForActivity(
+            ctx.baseContext
+        )
+        return null
+    }
+
+    private fun searchFragmentOperation(activity:Activity){
+        val container = activity.findViewById<View>(android.R.id.content)
+        val searchFragment = SearchFragment.newInstance(dataList)
+        val fact = activity as FragmentActivity
+        if (container != null) {
+            Log.d("TAG", "clickHandling: ${container.id}")
+            fact.supportFragmentManager.beginTransaction().replace(container.id,searchFragment).commit()
+        }
+        //set  result
+        fact.supportFragmentManager
+            .setFragmentResultListener("SEARCH", fact
+            ) { _, result ->
+                val selectedItem = result.getString("selected")
+                text = selectedItem
+                Log.d("TAG", "navigateToSearchFragment: $selectedItem ")
+
+            }
 
     }
 
