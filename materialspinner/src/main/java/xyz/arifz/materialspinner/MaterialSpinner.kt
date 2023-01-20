@@ -185,7 +185,8 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun <T : List<String>> setItems(items: T) {
-        setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
+        if (isSearchable) this.items = items.toList() as? ArrayList<String> ?: ArrayList()
+        else setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
     }
 
     fun setItems(items: Array<String>) {

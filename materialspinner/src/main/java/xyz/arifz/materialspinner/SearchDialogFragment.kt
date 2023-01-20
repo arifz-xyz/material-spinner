@@ -77,6 +77,11 @@ class SearchDialogFragment : DialogFragment() {
         ivClose?.setOnClickListener { dismiss() }
     }
 
+    override fun onResume() {
+        super.onResume()
+        searchView?.requestFocus()
+    }
+
 
     companion object {
         private const val TAG = "SearchDialogFragment"
