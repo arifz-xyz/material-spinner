@@ -110,9 +110,11 @@ class MaterialSpinner : TextInputLayout {
                 if (isRequired) {
                     if (hint.isNullOrEmpty())
                         hint = ""
-                    hint += " *"
-                    hintForColor = hint
-                    setHintAsteriskColor(Color.RED)
+                    if (!hint.contains("*")) {
+                        hint += " *"
+                        hintForColor = hint
+                        setHintAsteriskColor(Color.RED)
+                    }
                 } else {
                     hintForColor = hint ?: ""
                     setHint(hint)
