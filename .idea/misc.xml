@@ -9,9 +9,13 @@
         <entry key="..\:/Users/shaki/StudioProjects/material-spinner/demo/src/main/res/layout/activity_demo.xml" value="0.358695652173913" />
         <entry key="demo/src/main/res/layout/activity_demo.xml" value="0.4036458333333333" />
         <entry key="demo/src/main/res/layout/activity_main.xml" value="0.3648148148148148" />
+        <entry key="materialspinner/src/main/res/drawable/bg_search_view.xml" value="0.2485" />
         <entry key="materialspinner/src/main/res/drawable/box_outline_colorset.xml" value="0.218" />
+        <entry key="materialspinner/src/main/res/drawable/ic_close.xml" value="0.2485" />
         <entry key="materialspinner/src/main/res/drawable/ic_down_arrow.xml" value="0.3075" />
         <entry key="materialspinner/src/main/res/drawable/ic_dropdown_arrow.xml" value="0.3075" />
+        <entry key="materialspinner/src/main/res/drawable/ic_search.xml" value="0.2485" />
+        <entry key="materialspinner/src/main/res/layout/dialog_fragment_search.xml" value="0.4036458333333333" />
       </map>
     </option>
   </component>
