@@ -5,10 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.ListView
+import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
 
@@ -18,11 +15,14 @@ class SearchDialogFragment : DialogFragment() {
     private var ivClose: ImageView? = null
     private var items = ArrayList<String>()
     private var adapter: ArrayAdapter<String>? = null
+    private var tvTitle: TextView? = null
+    private var title: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
             items = getStringArrayList(KEY_ITEMS) as? ArrayList<String> ?: ArrayList()
+            title = getString(KEY_TITLE)
         }
     }
 
@@ -39,10 +39,16 @@ class SearchDialogFragment : DialogFragment() {
         searchView = view.findViewById(R.id.search_view)
         listView = view.findViewById(R.id.list_view)
         ivClose = view.findViewById(R.id.iv_close)
+        tvTitle = view.findViewById(R.id.tv_title)
 
+        initTitle()
         setupListView()
         setupSearchView()
         initListener()
+    }
+
+    private fun initTitle() {
+        tvTitle?.text = title
     }
 
     private fun setupListView() {
@@ -86,10 +92,17 @@ class SearchDialogFragment : DialogFragment() {
     companion object {
         private const val TAG = "SearchDialogFragment"
 
-        fun newInstance(items: ArrayList<String>?) = SearchDialogFragment().apply {
-            val args = Bundle()
-            items?.let { args.putStringArrayList(KEY_ITEMS, it) }
-            arguments = args
-        }
+        fun newInstance(items: ArrayList<String>?, title: String? = "") =
+            SearchDialogFragment().apply {
+                val args = Bundle()
+                items?.let {
+                    args.putStringArrayList(
+                        KEY_ITEMS,
+                        it
+                    )
+                    args.putString (KEY_TITLE, title)
+                }
+                arguments = args
+            }
     }
 }

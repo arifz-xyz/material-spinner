@@ -20,7 +20,7 @@ class DemoActivity : AppCompatActivity() {
     private fun setupSpinner() {
         val datas = arrayOf("Male", "Female", "Others")
         binding.spn.setItems(datas)
-
+        binding.spn.setSearchTitle("Gender")
         binding.spn.hint = "Gender"
         binding.spn.apply {
             setBoxWidth(1)

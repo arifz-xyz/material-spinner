@@ -29,6 +29,7 @@ class MaterialSpinner : TextInputLayout {
     private var isRequired = false
     private var isSearchable = false
     private var items = ArrayList<String>()
+    private var searchTitle: String? = null
 
     init {
         setupTheme()
@@ -281,7 +282,10 @@ class MaterialSpinner : TextInputLayout {
 
     private fun openSearchDialogFragment(activity: Activity) {
         val container = activity.findViewById<View>(android.R.id.content)
-        val searchDialogFragment = SearchDialogFragment.newInstance(items)
+        val searchDialogFragment = SearchDialogFragment.newInstance(
+            items = items,
+            title = searchTitle
+        )
         val fragmentActivity = activity as FragmentActivity
         if (container != null) {
             fragmentActivity.supportFragmentManager.beginTransaction()
@@ -302,6 +306,10 @@ class MaterialSpinner : TextInputLayout {
             ctx.baseContext
         )
         return null
+    }
+
+    fun setSearchTitle(title: String) {
+        searchTitle = title
     }
 
 }

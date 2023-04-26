@@ -6,5 +6,5 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MaterialSpinner"
-include ':demo'
+//include ':demo'
 include ':materialspinner'
