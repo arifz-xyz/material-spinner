@@ -4,5 +4,5 @@
     <color name="color_light_grey">#DDDDDD</color>
     <color name="color_grey">#868686</color>
     <color name="color_white">#FFFFFFFF</color>
-    <color name="colorAsh">#efefef</color>
+    <color name="color_ash">#EFEFEF</color>
 </resources>

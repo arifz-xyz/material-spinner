@@ -11,7 +11,10 @@ import android.util.AttributeSet
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Filterable
+import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -19,14 +22,13 @@ import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
 
-
 class MaterialSpinner : TextInputLayout {
 
     private lateinit var autoCompleteTextView: AppCompatAutoCompleteTextView
     private var hintForColor = ""
     private var isRequired = false
     private var isSearchable = false
-    private var dataList:ArrayList<String>? = null
+    private var items = ArrayList<String>()
 
     init {
         setupTheme()
@@ -108,9 +110,11 @@ class MaterialSpinner : TextInputLayout {
                 if (isRequired) {
                     if (hint.isNullOrEmpty())
                         hint = ""
-                    hint += " *"
-                    hintForColor = hint
-                    setHintAsteriskColor(Color.RED)
+                    if (!hint.contains("*")) {
+                        hint += " *"
+                        hintForColor = hint
+                        setHintAsteriskColor(Color.RED)
+                    }
                 } else {
                     hintForColor = hint ?: ""
                     setHint(hint)
@@ -162,11 +166,9 @@ class MaterialSpinner : TextInputLayout {
     private fun clickHandling() {
         if (isSearchable) {
             val activity = scanForActivity(context)
-            Toast.makeText(context, "searchable $activity", Toast.LENGTH_SHORT).show()
-            if (activity != null) {
-                searchFragmentOperation(activity)
+            activity?.let { openSearchDialogFragment(it) } ?: run {
+                Log.d("MaterialSpinner", "activity not found")
             }
-
         } else autoCompleteTextView.showDropDown()
     }
 
@@ -181,19 +183,17 @@ class MaterialSpinner : TextInputLayout {
     }
 
     fun <T> setAdapter(adapter: T) where T : ListAdapter, T : Filterable {
-        if (isSearchable)
-            Toast.makeText(context, "need to initialize custom adapter here", Toast.LENGTH_SHORT)
-                .show()
-        else autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setAdapter(adapter)
     }
 
     fun <T : List<String>> setItems(items: T) {
-        setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
+        if (isSearchable) this.items = items.toList() as? ArrayList<String> ?: ArrayList()
+        else setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
     }
 
     fun setItems(items: Array<String>) {
-        dataList = items.toList() as ArrayList<String>
-        setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
+        if (isSearchable) this.items = items.toList() as? ArrayList<String> ?: ArrayList()
+        else setAdapter(ArrayAdapter(context, R.layout.support_simple_spinner_dropdown_item, items))
     }
 
     fun setSelection(position: Int) {
@@ -279,31 +279,29 @@ class MaterialSpinner : TextInputLayout {
         isSearchable = searchable
     }
 
+    private fun openSearchDialogFragment(activity: Activity) {
+        val container = activity.findViewById<View>(android.R.id.content)
+        val searchDialogFragment = SearchDialogFragment.newInstance(items)
+        val fragmentActivity = activity as FragmentActivity
+        if (container != null) {
+            fragmentActivity.supportFragmentManager.beginTransaction()
+                .replace(container.id, searchDialogFragment).commit()
+        }
+
+        fragmentActivity.supportFragmentManager.setFragmentResultListener(
+            KEY_SEARCH,
+            fragmentActivity
+        ) { _, result ->
+            val selectedItem = result.getString(KEY_SELECTED_ITEM)
+            text = selectedItem
+        }
+    }
+
     private fun scanForActivity(ctx: Context): Activity? {
         if (ctx is Activity) return ctx else if (ctx is ContextWrapper) return scanForActivity(
             ctx.baseContext
         )
         return null
-    }
-
-    private fun searchFragmentOperation(activity:Activity){
-        val container = activity.findViewById<View>(android.R.id.content)
-        val searchFragment = SearchFragment.newInstance(dataList)
-        val fact = activity as FragmentActivity
-        if (container != null) {
-            Log.d("TAG", "clickHandling: ${container.id}")
-            fact.supportFragmentManager.beginTransaction().replace(container.id,searchFragment).commit()
-        }
-        //set  result
-        fact.supportFragmentManager
-            .setFragmentResultListener("SEARCH", fact
-            ) { _, result ->
-                val selectedItem = result.getString("selected")
-                text = selectedItem
-                Log.d("TAG", "navigateToSearchFragment: $selectedItem ")
-
-            }
-
     }
 
 }
