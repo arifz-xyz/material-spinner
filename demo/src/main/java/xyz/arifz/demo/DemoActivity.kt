@@ -5,13 +5,17 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import xyz.arifz.demo.databinding.ActivityDemoBinding
+import xyz.arifz.materialspinner.OnSearchSpinnerItemClickListener
 
 class DemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDemoBinding
+    val TAG = "DemoActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDemoBinding.inflate(layoutInflater)
+        
         setContentView(binding.root)
         setupSpinner()
         initListener()
@@ -38,6 +42,12 @@ class DemoActivity : AppCompatActivity() {
                 "onItemClickListener"
             )
         }
+        
+        binding.spn.onSearchSpinnerItemClickListener(object: OnSearchSpinnerItemClickListener{
+            override fun onItemClicked(item: String?) {
+                Log.d(TAG, "onItemClicked: $item")
+            }
+        })
     }
 
     private fun initListener() {
@@ -52,4 +62,5 @@ class DemoActivity : AppCompatActivity() {
         }
     }
 
+    
 }
