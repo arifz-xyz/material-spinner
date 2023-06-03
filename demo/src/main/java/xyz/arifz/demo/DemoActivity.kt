@@ -1,18 +1,21 @@
 package xyz.arifz.demo
 
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import xyz.arifz.demo.databinding.ActivityDemoBinding
+import xyz.arifz.materialspinner.OnSearchSpinnerItemClickListener
 
 class DemoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDemoBinding
+    val TAG = "DemoActivity"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDemoBinding.inflate(layoutInflater)
+        
         setContentView(binding.root)
         setupSpinner()
         initListener()
@@ -21,25 +24,30 @@ class DemoActivity : AppCompatActivity() {
     private fun setupSpinner() {
         val datas = arrayOf("Male", "Female", "Others")
         binding.spn.setItems(datas)
-
+        binding.spn.setSearchTitle("Gender")
         binding.spn.hint = "Gender"
         binding.spn.apply {
             setBoxWidth(1)
             setHintFontFamily(R.font.poppins)
-            setTextSize(12f)
+            setFontSize(12f)
             setTextColor("#FF0000")
             setTextFontFamily(R.font.poppins)
         }
 
         binding.spn.text = "Female"
 
-
-        binding.spn.onItemClickListener { p0, p1, p2, p3 ->
+        binding.spn.onItemClickListener { _, _, _, _ ->
             Log.v(
                 "Hello",
                 "onItemClickListener"
             )
         }
+        
+        binding.spn.onSearchSpinnerItemClickListener(object: OnSearchSpinnerItemClickListener{
+            override fun onItemClicked(item: String?) {
+                Log.d(TAG, "onItemClicked: $item")
+            }
+        })
     }
 
     private fun initListener() {
@@ -54,4 +62,5 @@ class DemoActivity : AppCompatActivity() {
         }
     }
 
+    
 }
