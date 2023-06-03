@@ -22,11 +22,11 @@ class DemoActivity : AppCompatActivity() {
     }
 
     private fun setupSpinner() {
-        val datas = arrayOf("Male", "Female", "Others")
+        val datas = arrayOf("Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others","Male", "Female", "Others")
         binding.spn.setItems(datas)
         binding.spn.setSearchTitle("Gender")
         binding.spn.hint = "Gender"
-        binding.spn.setReadOnly(true)
+        //binding.spn.setReadOnly(true)
         binding.spn.apply {
             setBoxWidth(1)
             setHintFontFamily(R.font.poppins)
@@ -49,6 +49,8 @@ class DemoActivity : AppCompatActivity() {
                 Log.d(TAG, "onItemClicked: $item")
             }
         })
+
+        binding.spn.getDialogFragment()?.dialog?.window?.setLayout(240, 600)
     }
 
     private fun initListener() {

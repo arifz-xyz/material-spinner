@@ -18,6 +18,7 @@ import android.widget.ListAdapter
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.textfield.TextInputLayout
 import xyz.arifz.materialspinner.ExtensionFunctions.dpToPx
@@ -283,6 +284,11 @@ class MaterialSpinner : TextInputLayout {
         isSearchable = searchable
     }
 
+    private var searchDialogFragment: SearchDialogFragment? = null
+
+    fun getDialogFragment(): SearchDialogFragment? {
+        return searchDialogFragment
+    }
 
     private fun openSearchDialogFragment(activity: Activity) {
         val container = activity.findViewById<View>(android.R.id.content)
@@ -290,6 +296,9 @@ class MaterialSpinner : TextInputLayout {
             items = items,
             title = searchTitle
         )
+
+
+
         val fragmentActivity = activity as FragmentActivity
         if (container != null) {
             fragmentActivity.supportFragmentManager.beginTransaction()
