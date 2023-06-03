@@ -140,6 +140,7 @@ class MaterialSpinner : TextInputLayout {
         if (state) {
             isClickable = false
             isFocusable = false
+            isEnabled = false
             isFocusableInTouchMode = false
             setReadOnlyColor()
         }

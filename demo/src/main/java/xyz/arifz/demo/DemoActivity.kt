@@ -26,6 +26,7 @@ class DemoActivity : AppCompatActivity() {
         binding.spn.setItems(datas)
         binding.spn.setSearchTitle("Gender")
         binding.spn.hint = "Gender"
+        binding.spn.setReadOnly(true)
         binding.spn.apply {
             setBoxWidth(1)
             setHintFontFamily(R.font.poppins)
