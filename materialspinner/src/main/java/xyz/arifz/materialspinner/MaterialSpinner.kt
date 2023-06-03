@@ -5,7 +5,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.text.*
+import android.text.Editable
+import android.text.InputType
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import android.util.Log
@@ -283,6 +287,11 @@ class MaterialSpinner : TextInputLayout {
         isSearchable = searchable
     }
 
+    private var searchDialogFragment: SearchDialogFragment? = null
+
+    fun getDialogFragment(): SearchDialogFragment? {
+        return searchDialogFragment
+    }
 
     private fun openSearchDialogFragment(activity: Activity) {
         val container = activity.findViewById<View>(android.R.id.content)
@@ -290,6 +299,9 @@ class MaterialSpinner : TextInputLayout {
             items = items,
             title = searchTitle
         )
+
+
+
         val fragmentActivity = activity as FragmentActivity
         if (container != null) {
             fragmentActivity.supportFragmentManager.beginTransaction()

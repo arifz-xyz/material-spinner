@@ -1,20 +1,14 @@
 package xyz.arifz.materialspinner
 
 import android.app.Activity
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.SearchView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import java.text.DecimalFormat
 
@@ -27,8 +21,6 @@ class SearchDialogFragment : DialogFragment() {
     private var tvTitle: TextView? = null
     private var title: String? = null
 
-    private var yDelta: Int = 0
-    private var firstY: Int = 0
     private var realHeight: Int = 0
     private var realWidth: Int = 0
 
@@ -50,18 +42,6 @@ class SearchDialogFragment : DialogFragment() {
         return view
     }
 
-    private fun setDialogStyle() {
-        val lp = WindowManager.LayoutParams()
-        lp.height = realHeight
-        lp.width=realWidth
-        dialog?.window?.requestFeature(Window.FEATURE_NO_TITLE)
-        dialog?.window?.setGravity(Gravity.CENTER)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.attributes =  lp
-        @Suppress("DEPRECATION")
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-        dialog?.setCanceledOnTouchOutside(false)
-    }
 
     private fun calculateDeviceResolution(context: Activity) {
         val display = if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
@@ -80,18 +60,11 @@ class SearchDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(
-            ConstraintLayout.LayoutParams.MATCH_PARENT,
-            ConstraintLayout.LayoutParams.WRAP_CONTENT
-        )
-       // removeFullScreen()
-    }
-
-    private fun removeFullScreen() {
-        val params: ViewGroup.LayoutParams = dialog!!.window!!.attributes
-        val margin = getPercentage(realWidth, 16)
-        params.width = realWidth - margin
-        dialog!!.window!!.attributes = params as WindowManager.LayoutParams
+        dialog?.window?.let { window ->
+            val layoutParams = window.attributes
+            layoutParams.height = realHeight / 2
+            window.attributes = layoutParams
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
