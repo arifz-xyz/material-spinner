@@ -112,11 +112,11 @@ class MaterialSpinner : TextInputLayout {
                 if (isRequired) {
                     if (hint.isNullOrEmpty())
                         hint = ""
-                    if (!hint.contains("*")) {
+
+                    if (!hint.contains("*"))
                         hint += " *"
-                        hintForColor = hint
-                        setHintAsteriskColor(Color.RED)
-                    }
+                    hintForColor = hint
+                    setHintAsteriskColor(Color.RED)
                 } else {
                     hintForColor = hint ?: ""
                     setHint(hint)
@@ -136,10 +136,11 @@ class MaterialSpinner : TextInputLayout {
         }
     }
 
-    private fun setReadOnly(state: Boolean) {
+    fun setReadOnly(state: Boolean) {
         if (state) {
             isClickable = false
             isFocusable = false
+            isEnabled = false
             isFocusableInTouchMode = false
             setReadOnlyColor()
         }
@@ -274,7 +275,8 @@ class MaterialSpinner : TextInputLayout {
 
     fun setIsRequired(isReq: Boolean) {
         isRequired = isReq
-        setHint(hint?.toString()?.trim()?.replace(" *", ""))
+        if (!hint.toString().contains("*"))
+            hint = hint?.toString()?.trim()?.replace(" *", "")
     }
 
     fun setIsSearchable(searchable: Boolean) {
