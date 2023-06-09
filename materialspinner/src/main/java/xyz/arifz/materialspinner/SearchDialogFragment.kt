@@ -44,7 +44,7 @@ class SearchDialogFragment : DialogFragment() {
 
 
     private fun calculateDeviceResolution(context: Activity) {
-        val display = if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+        val display = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
             context.display
         } else {
             @Suppress("DEPRECATION")
@@ -53,9 +53,7 @@ class SearchDialogFragment : DialogFragment() {
         val realMetrics = DisplayMetrics()
         display?.getRealMetrics(realMetrics)
         realWidth = realMetrics.widthPixels
-        Log.d("OrderDialog", "$realWidth")
         realHeight = realMetrics.heightPixels
-        Log.i("Q#_dialog_fragment", "realwidth:$realWidth >=< realHeight$realHeight")
     }
 
     override fun onStart() {
@@ -109,6 +107,7 @@ class SearchDialogFragment : DialogFragment() {
             val item = adapter?.getItem(position)
             val bundle = Bundle()
             bundle.putString(KEY_SELECTED_ITEM, item)
+            bundle.putInt(KEY_SELECTED_POSITION, position)
             requireActivity().supportFragmentManager.setFragmentResult(KEY_SEARCH, bundle)
             dismiss()
         }
@@ -140,7 +139,7 @@ class SearchDialogFragment : DialogFragment() {
                         KEY_ITEMS,
                         it
                     )
-                    args.putString (KEY_TITLE, title)
+                    args.putString(KEY_TITLE, title)
                 }
                 arguments = args
             }

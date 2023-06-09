@@ -34,7 +34,7 @@ class MaterialSpinner : TextInputLayout {
     private var isSearchable = false
     private var items = ArrayList<String>()
     private var searchTitle: String? = null
-    var onSearchSpinnerItemClickListener :  OnSearchSpinnerItemClickListener? = null
+    var onSearchSpinnerItemClickListener: OnSearchSpinnerItemClickListener? = null
 
     init {
         setupTheme()
@@ -301,7 +301,6 @@ class MaterialSpinner : TextInputLayout {
         )
 
 
-
         val fragmentActivity = activity as FragmentActivity
         if (container != null) {
             fragmentActivity.supportFragmentManager.beginTransaction()
@@ -314,7 +313,8 @@ class MaterialSpinner : TextInputLayout {
         ) { _, result ->
             val selectedItem = result.getString(KEY_SELECTED_ITEM)
             text = selectedItem
-            onSearchSpinnerItemClickListener?.onItemClicked(selectedItem)
+            val position = result.getInt(KEY_SELECTED_POSITION)
+            onSearchSpinnerItemClickListener?.onItemClicked(selectedItem, position)
         }
     }
 
